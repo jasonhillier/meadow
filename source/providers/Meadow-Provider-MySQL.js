@@ -48,7 +48,16 @@ var MeadowProvider = function()
 			/*jshint -W089 */
 			for(var tmpColumn in pRecord)
 			{
-				pObject[tmpColumn] = pRecord[tmpColumn];
+				if (pRecord[tmpColumn] instanceof Date)
+				{
+					//mysql2 lib BUG FIX: keep all dates coming from mysql2 in UTC time
+					var tmpDate = pRecord[tmpColumn];
+					pObject[tmpColumn] = new Date(Date.UTC(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate(), tmpDate.getHours(), tmpDate.getMinutes(), tmpDate.getSeconds()))
+				}
+				else
+				{
+					pObject[tmpColumn] = pRecord[tmpColumn];
+				}
 			}
 			/*jshint +W089 */
 		};
